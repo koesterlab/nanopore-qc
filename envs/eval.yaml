@@ -1,0 +1,5 @@
+channels:
+  - conda-forge
+dependencies:
+  - matplotlib =2.2
+  - seaborn =0.9
