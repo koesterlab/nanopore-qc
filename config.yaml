@@ -1,0 +1,3 @@
+fastq-patterns:
+  - /var/lib/MinKNOW/data/reads/{sample,[^/]+}/fastq/pass/uploaded/fastq_runid_{unit,[^/]+}.fastq
+  - /var/lib/MinKNOW/data/reads/{sample,[^/]+}/fastq/pass/fastq_runid_{unit,[^/]+}.fastq
