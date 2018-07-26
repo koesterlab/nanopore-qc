@@ -16,6 +16,7 @@ if not lendist.empty:
     sns.barplot(x="Length", y="Count", data=lendist, color="#649600")
 
 sns.despine()
+plt.yscale("log")
 plt.xlabel("min read length")
 plt.ylabel("count")
 plt.xticks(rotation="vertical")
