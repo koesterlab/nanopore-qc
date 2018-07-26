@@ -5,31 +5,35 @@ from snakemake.io import apply_wildcards
 configfile: "config.yaml"
 
 
-samples = []
-units = []
-fqs = []
-fast5s = []
-print("Detecting available FASTQ files...")
+logger.info("Detecting available FASTQ files...")
+samples = pd.DataFrame(columns=["sample", "fast5_pattern"])
+units = pd.DataFrame(columns=["sample", "unit", "fq"])
 for pattern in config["fastq-patterns"]:
     w = glob_wildcards(pattern)
-    samples.extend(w.sample)
-    units.extend(w.unit)
-    items = list(zip(w.sample, w.unit))
-    fqs.extend(apply_wildcards(pattern, {"sample": sample, "unit": unit}) for sample, unit in items)
-    fast5s.extend(config["fast5-pattern"].format(sample=sample, unit=unit) for sample, unit in items)
-
-
-samples = pd.DataFrame({"sample": samples, "unit": units, "fq": fqs, "fast5_pattern": fast5s}).set_index(["sample", "unit"], drop=False)
-
+    for sample in set(w.sample):
+        samples = samples.append({"sample": sample, "fast5_pattern": config["fast5-pattern"].format(sample=sample)}, ignore_index=True)
+    for sample, unit in zip(w.sample, w.unit):
+        units = units.append({"sample": sample, "unit": unit, "fq": apply_wildcards(pattern, {"sample": sample, "unit": unit})}, ignore_index=True)
+samples = samples.set_index("sample", drop=False)
+units = units.set_index(["sample", "unit"], drop=False)
 
 report: "report/workflow.rst"
 
 
+targets_qc = (expand("plots/{sample}.{plot}.svg", sample=samples["sample"], plot=["read-lengths", "quals"]) +
+              expand("plots/{sample}.signals.svg", sample=samples["sample"]))
+
+targets_classification = expand("kraken/{sample}.tsv", sample=samples["sample"])
+
+
 rule all:
     input:
-        expand("plots/{item.sample}-{item.unit}.{plot}.svg", item=samples.itertuples(), plot=["read-lengths", "quals"]),
-        expand("plots/{sample}.signals.svg", sample=samples["sample"].unique()),
-        expand("kraken/{item.sample}/{item.unit}.tsv", item=samples.itertuples())
+        targets_qc, targets_classification
+
+
+rule qc:
+    input:
+        targets_qc
 
 
 include: "rules/qc.smk"

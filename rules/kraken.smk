@@ -1,11 +1,10 @@
 rule kraken:
     input:
-        lambda w: samples.loc[(w.sample, w.unit), "fq"]
+        reads="reads/{sample}.fq",
+        db=config["kraken"]["db"]
     output:
-        "kraken/{sample}/{unit}.tsv"
+        "kraken/{sample}.tsv"
     conda:
         "../envs/kraken.yaml"
-    params:
-        **config["kraken"]
     shell:
-        "kraken --db {params.db} {input} > {output}"
+        "kraken --db {input.db} {input.reads} > {output}"

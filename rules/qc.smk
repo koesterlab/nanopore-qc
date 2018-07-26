@@ -3,7 +3,7 @@ import glob
 
 rule plot_raw:
     input:
-        lambda w: glob.glob(samples.loc[w.sample, "fast5_pattern"].iloc[0])[config["signal"]["read"]]
+        lambda w: glob.glob(samples.loc[w.sample, "fast5_pattern"])[config["signal"]["read"]]
     output:
         report("plots/{sample}.signals.svg", caption="../report/signal.rst", category="Raw signal")
     conda:
@@ -14,24 +14,33 @@ rule plot_raw:
         "../scripts/plot-signals.py"
 
 
+rule merge_fastq:
+    input:
+        lambda w: units.loc[w.sample, "fq"]
+    output:
+        "reads/{sample}.fq"
+    shell:
+        "cat {input} > {output}"
+
+
 rule fastqc:
     input:
-        lambda w: samples.loc[(w.sample, w.unit), "fq"]
+        "reads/{sample}.fq"
     output:
-        html="qc/fastqc/{sample}/{unit}.html",
-        zip="qc/fastqc/{sample}/{unit}.zip"
+        html="qc/fastqc/{sample}.html",
+        zip="qc/fastqc/{sample}.zip"
     params: ""
     log:
-        "logs/fastqc/{sample}/{unit}.log"
+        "logs/fastqc/{sample}.log"
     wrapper:
         "0.27.1/bio/fastqc"
 
 
 rule crimson:
     input:
-        "qc/fastqc/{sample}/{unit}.zip"
+        "qc/fastqc/{sample}.zip"
     output:
-        "qc/fastqc/{sample}/{unit}.json"
+        "qc/fastqc/{sample}.json"
     conda:
         "../envs/crimson.yaml"
     shell:
@@ -40,9 +49,9 @@ rule crimson:
 
 rule plot_read_lengths:
     input:
-        "qc/fastqc/{sample}/{unit}.json"
+        "qc/fastqc/{sample}.json"
     output:
-        report("plots/{sample}-{unit}.read-lengths.svg", caption="../report/read-lengths.rst", category="Read length")
+        report("plots/{sample}.read-lengths.svg", caption="../report/read-lengths.rst", category="Read length")
     conda:
         "../envs/eval.yaml"
     script:
@@ -51,9 +60,9 @@ rule plot_read_lengths:
 
 rule plot_quals:
     input:
-        "qc/fastqc/{sample}/{unit}.json"
+        "qc/fastqc/{sample}.json"
     output:
-        report("plots/{sample}-{unit}.quals.svg", caption="../report/quals.rst", category="Base quality")
+        report("plots/{sample}.quals.svg", caption="../report/quals.rst", category="Base quality")
     conda:
         "../envs/eval.yaml"
     script:
