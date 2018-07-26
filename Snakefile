@@ -23,7 +23,7 @@ report: "report/workflow.rst"
 targets_qc = (expand("plots/{sample}.{plot}.svg", sample=samples["sample"], plot=["read-lengths", "quals"]) +
               expand("plots/{sample}.signals.svg", sample=samples["sample"]))
 
-targets_classification = expand("kraken/{sample}.tsv", sample=samples["sample"])
+targets_classification = expand("plots/{sample}.classification.svg", sample=samples["sample"])
 
 
 rule all:

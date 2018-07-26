@@ -12,3 +12,6 @@ signal:
   steps: [100, 500]
   # plot signal of this read of every sample
   read: 0
+
+style:
+  color: "#649600"
