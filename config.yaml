@@ -1,3 +1,14 @@
 fastq-patterns:
   - /var/lib/MinKNOW/data/reads/{sample,[^/]+}/fastq/pass/uploaded/fastq_runid_{unit,[^/]+}.fastq
   - /var/lib/MinKNOW/data/reads/{sample,[^/]+}/fastq/pass/fastq_runid_{unit,[^/]+}.fastq
+
+fast5-pattern: /var/lib/MinKNOW/data/reads/{sample}/fast5/pass/*/*.fast5
+
+kraken:
+  db: /var/lib/kraken/minikraken-db-20171019
+
+signal:
+  # plot steps in the given interval
+  steps: [100, 500]
+  # plot signal of this read of every sample
+  read: 0

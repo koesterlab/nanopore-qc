@@ -3,3 +3,4 @@ channels:
 dependencies:
   - matplotlib =2.2
   - seaborn =0.9
+  - h5py =2.8
