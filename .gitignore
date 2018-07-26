@@ -21,3 +21,5 @@ scripts/.snakemake*
 !.editorconfig
 !.travis.yml
 !.test
+!report
+!report/*.smk
