@@ -16,7 +16,7 @@ rule kraken_report:
         tsv="kraken/{sample}.tsv",
         db=config["kraken"]["db"]
     output:
-        "tables/{sample}.classification.tsv"
+        report("tables/{sample}.classification.tsv", caption="../report/kraken.rst", category="classification")
     conda:
         "../envs/kraken.yaml"
     shell:
@@ -38,7 +38,7 @@ rule plot_classification_tree:
     input:
         "kraken/{sample}.classification.dot"
     output:
-        "plots/{sample}.classification.svg"
+        report("plots/{sample}.classification.svg", caption="../report/classification-tree.rst", category="classification")
     conda:
         "../envs/eval.yaml"
     params:
