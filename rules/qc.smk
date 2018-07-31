@@ -74,7 +74,8 @@ rule plot_kmer_mapping:
         mapping="kraken/{sample}.tsv",
         classification="tables/{sample}.classification.tsv"
     output:
-        "plots/{sample}.kmer-mapping.svg"
+        svg="plots/{sample}.kmer-mapping.svg",
+        dot="dot/{sample}.full_tree.dot"
     conda:
         "../envs/eval.yaml"
     script:

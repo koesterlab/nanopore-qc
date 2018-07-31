@@ -54,9 +54,11 @@ img = mappings.applymap(cmap.rgb)
 shape = list(img.shape) + [3]
 img = np.vstack(img.values.tolist()).reshape(shape)
 
-plt.imshow(img, interpolation="nearest")
+plt.imshow(img, interpolation="nearest", aspect="auto")
 
 plt.xlabel("k-mer")
 plt.ylabel("read")
 
-plt.savefig(snakemake.output[0])
+plt.savefig(snakemake.output.svg)
+
+cmap.write_dot(snakemake.output.dot)
