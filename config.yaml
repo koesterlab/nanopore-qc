@@ -1,17 +1,23 @@
+# Patterns matching FASTQ files on disk. Samples and sequencing units (runs) will be inferred from these.
+# This should usually be set to the place where MinKNOW stores its results.
 fastq-patterns:
   - /var/lib/MinKNOW/data/reads/{sample,[^/]+}/fastq/uploaded/pass/fastq_runid_{unit,[^/]+}.fastq
   - /var/lib/MinKNOW/data/reads/{sample,[^/]+}/fastq/pass/fastq_runid_{unit,[^/]+}.fastq
 
+# Pattern for the corresponding fast5 files.
 fast5-pattern: /var/lib/MinKNOW/data/reads/{sample}/fast5/pass/*/*.fast5
 
+# Path to the Kraken database that shall be used for classification.
 kraken:
   db: /var/lib/kraken/standard_k16_m8
 
+# Configure how raw signals shall be plotted.
 signal:
   # plot steps in the given interval
   steps: [100, 500]
   # plot signal of this read of every sample
   read: 0
 
+# Base color to use for plots.
 style:
   color: "#649600"
