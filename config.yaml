@@ -5,7 +5,7 @@ fastq-patterns:
 fast5-pattern: /var/lib/MinKNOW/data/reads/{sample}/fast5/pass/*/*.fast5
 
 kraken:
-  db: /var/lib/kraken/minikraken_20171013_4GB
+  db: /var/lib/kraken/standard_k16_m8
 
 signal:
   # plot steps in the given interval
