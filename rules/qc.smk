@@ -67,3 +67,15 @@ rule plot_quals:
         "../envs/eval.yaml"
     script:
         "../scripts/plot-quals.py"
+
+
+rule plot_kmer_mapping:
+    input:
+        mapping="kraken/{sample}.tsv",
+        classification="tables/{sample}.classification.tsv"
+    output:
+        "plots/{sample}.kmer-mapping.svg"
+    conda:
+        "../envs/eval.yaml"
+    script:
+        "../scripts/plot-kmer-mapping.py"
