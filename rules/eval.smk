@@ -38,7 +38,7 @@ rule plot_kmer_mapping:
         mapping="kraken/{sample}.tsv",
         colormap="colormap/{sample}.pickle"
     output:
-        "plots/{sample}.kmer-mapping.svg"
+        report("plots/{sample}.kmer-mapping.svg", caption="../report/kmer-mapping.rst", category="K-mer mapping")
     conda:
         "../envs/eval.yaml"
     script:
