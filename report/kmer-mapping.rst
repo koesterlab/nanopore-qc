@@ -11,6 +11,8 @@ This procedure ensures that
 1. Taxons yield a more saturated color the further away (i.e. more specific) they are from the root node.
 2. Taxons on the same branch get a similar hue.
 
+Unclassified k-mers or k-mers mapping to taxa that do not have enough abundance to occur in the classification tree are shown as black.
+
 .. _Kraken: http://ccb.jhu.edu/software/kraken
 .. _HSV: https://en.wikipedia.org/wiki/HSL_and_HSV
 
