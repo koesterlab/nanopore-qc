@@ -46,5 +46,5 @@ rule plot_classification_tree:
     shell:
         "dot -Tsvg {input} "
         "-Grankdir=TB -Nshape=box -Nstyle=rounded -Nfontname=sans "
-        "-Nfontsize=10 -Npenwidth=2 -Epenwidth=2 -Ecolor=grey -Nbgcolor=white -Ncolor='{params.color}'"
+        "-Nfontsize=10 -Npenwidth=2 -Epenwidth=2 -Ecolor=grey -Nbgcolor=white " # -Ncolor='{params.color}'"
         "> {output}"

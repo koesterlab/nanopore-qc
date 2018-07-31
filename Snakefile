@@ -20,8 +20,7 @@ units = units.set_index(["sample", "unit"], drop=False)
 report: "report/workflow.rst"
 
 
-targets_qc = (expand("plots/{sample}.{plot}.svg", sample=samples["sample"], plot=["read-lengths", "quals"]) +
-              expand("plots/{sample}.signals.svg", sample=samples["sample"]))
+targets_qc = expand("plots/{sample}.{plot}.svg", sample=samples["sample"], plot=["read-lengths", "quals", "signals", "kmer-mapping"])
 
 targets_classification = expand("plots/{sample}.classification.svg", sample=samples["sample"])
 
