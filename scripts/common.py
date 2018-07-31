@@ -13,11 +13,13 @@ def load_classification_tree(f, min_percentage=0.0, node_fmt="{name} ({perc}%)")
     classification = pd.read_table(f, header=None)
 
     classification.columns = ["percentage", "n_fragments_covered", "n_fragments_assigned", "code", "taxid", "name"]
+    classification.taxid = classification.taxid.astype(str)
+    classification = classification.set_index("taxid", drop=False)
 
     regexp = re.compile("(?P<indent> *)(?P<name>.+)")
     def fmt_node(row):
         m = regexp.match(row.name)
-        return '{}"{}":'.format(m.group("indent"), node_fmt.format(name=m.group("name"), perc=row.percentage, taxid=row.taxid))
+        return '{}"{}":'.format(m.group("indent"), row.taxid)
 
     tree = "\n".join(fmt_node(row) for row in classification.itertuples() if row.percentage >= min_percentage)
     tree = yaml.load(tree)
@@ -25,8 +27,9 @@ def load_classification_tree(f, min_percentage=0.0, node_fmt="{name} ({perc}%)")
 
     def traverse(subtree, G, parent=None):
         for node, children in subtree.items():
+            name, perc = classification.loc[node, ["name", "percentage"]].values
+            G.add_node(node, label=node_fmt.format(name=name.strip(), perc=perc))
             if parent is not None:
-                G.add_node(node)
                 G.add_edge(parent, node)
             
             if children:
@@ -64,12 +67,17 @@ class TreeCMap:
         return np.rad2deg(ang % (2 * np.pi)) / 360, min_sat + (1.0 - min_sat) * mag
 
     def rgb(self, taxid):
+        if taxid == "0":
+            # unclassified, mark black
+            return (0, 0, 0)
         if pd.isnull(taxid):
             return (1, 1, 1)
         try:
             angle, mag = self._normed_angle_and_mag(self.pos[taxid])
-            return matplotlib.colors.hsv_to_rgb([angle, mag, 0.9])
+            rgb = matplotlib.colors.hsv_to_rgb([angle, mag, 0.9])
+            return rgb
         except KeyError:
+            # not in tree, mark black
             return (0, 0 , 0)
 
     def color_tree(self, tree):

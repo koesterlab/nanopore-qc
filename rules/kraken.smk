@@ -25,26 +25,11 @@ rule kraken_report:
 
 rule extract_classification_tree:
     input:
-        "tables/{sample}.classification.tsv"
+        classification="tables/{sample}.classification.tsv",
+        colormap="colormap/{sample}.pickle"
     output:
         "kraken/{sample}.classification.dot"
     conda:
         "../envs/eval.yaml"
     script:
         "../scripts/plot-classification.py"
-
-
-rule plot_classification_tree:
-    input:
-        "kraken/{sample}.classification.dot"
-    output:
-        report("plots/{sample}.classification.svg", caption="../report/classification-tree.rst", category="classification")
-    conda:
-        "../envs/eval.yaml"
-    params:
-        color=config["style"]["color"]
-    shell:
-        "dot -Tsvg {input} "
-        "-Grankdir=TB -Nshape=box -Nstyle=rounded -Nfontname=sans "
-        "-Nfontsize=10 -Npenwidth=2 -Epenwidth=2 -Ecolor=grey -Nbgcolor=white " # -Ncolor='{params.color}'"
-        "> {output}"
