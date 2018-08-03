@@ -13,9 +13,9 @@ rule plot_raw:
 
 rule plot_read_lengths:
     input:
-        "qc/fastqc/{sample}.json"
+        "qc/fastqc/{sample}-{barcode}.json"
     output:
-        report("plots/{sample}.read-lengths.svg", caption="../report/read-lengths.rst", category="Read length")
+        report("plots/{sample}-{barcode}.read-lengths.svg", caption="../report/read-lengths.rst", category="Read length")
     conda:
         "../envs/eval.yaml"
     script:
@@ -24,9 +24,9 @@ rule plot_read_lengths:
 
 rule plot_quals:
     input:
-        "qc/fastqc/{sample}.json"
+        "qc/fastqc/{sample}-{barcode}.json"
     output:
-        report("plots/{sample}.quals.svg", caption="../report/quals.rst", category="Base quality")
+        report("plots/{sample}-{barcode}.quals.svg", caption="../report/quals.rst", category="Base quality")
     conda:
         "../envs/eval.yaml"
     script:
@@ -35,10 +35,10 @@ rule plot_quals:
 
 rule plot_kmer_mapping:
     input:
-        mapping="kraken/{sample}.tsv",
-        colormap="colormap/{sample}.pickle"
+        mapping="kraken/{sample}-{barcode}.tsv",
+        colormap="colormap/{sample}-{barcode}.pickle"
     output:
-        report("plots/{sample}.kmer-mapping.svg", caption="../report/kmer-mapping.rst", category="K-mer mapping")
+        report("plots/{sample}-{barcode}.kmer-mapping.svg", caption="../report/kmer-mapping.rst", category="K-mer mapping")
     conda:
         "../envs/eval.yaml"
     script:
@@ -47,9 +47,9 @@ rule plot_kmer_mapping:
 
 rule plot_classification_tree:
     input:
-        "kraken/{sample}.classification.dot"
+        "kraken/{sample}-{barcode}.classification.dot"
     output:
-        report("plots/{sample}.classification.svg", caption="../report/classification-tree.rst", category="classification")
+        report("plots/{sample}-{barcode}.classification.svg", caption="../report/classification-tree.rst", category="classification")
     conda:
         "../envs/eval.yaml"
     params:
