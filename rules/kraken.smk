@@ -1,9 +1,9 @@
 rule kraken:
     input:
-        reads="reads/{sample}.fq",
+        reads="reads/{sample}-{barcode}.fastq",
         db=config["kraken"]["db"]
     output:
-        "kraken/{sample}.tsv"
+        "kraken/{sample}-{barcode}.tsv"
     conda:
         "../envs/kraken.yaml"
     threads: 64
@@ -13,10 +13,10 @@ rule kraken:
 
 rule kraken_report:
     input:
-        tsv="kraken/{sample}.tsv",
+        tsv="kraken/{sample}-{barcode}.tsv",
         db=config["kraken"]["db"]
     output:
-        report("tables/{sample}.classification.tsv", caption="../report/kraken.rst", category="classification")
+        report("tables/{sample}-{barcode}.classification.tsv", caption="../report/kraken.rst", category="classification")
     conda:
         "../envs/kraken.yaml"
     shell:
@@ -25,10 +25,10 @@ rule kraken_report:
 
 rule extract_classification_tree:
     input:
-        classification="tables/{sample}.classification.tsv",
-        colormap="colormap/{sample}.pickle"
+        classification="tables/{sample}-{barcode}.classification.tsv",
+        colormap="colormap/{sample}-{barcode}.pickle"
     output:
-        "kraken/{sample}.classification.dot"
+        "kraken/{sample}-{barcode}.classification.dot"
     conda:
         "../envs/eval.yaml"
     script:

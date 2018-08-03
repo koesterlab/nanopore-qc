@@ -1,9 +1,10 @@
 
+
 rule calc_tree_colormap:
     input:
-        "tables/{sample}.classification.tsv"
+        "tables/{sample}-{barcode}.classification.tsv"
     output:
-        "colormap/{sample}.pickle"
+        "colormap/{sample}-{barcode}.pickle"
     conda:
         "../envs/eval.yaml"
     script:

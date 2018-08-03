@@ -1,33 +1,24 @@
 import glob
 
 
-rule merge_fastq:
-    input:
-        lambda w: units.loc[w.sample, "fq"]
-    output:
-        "reads/{sample}.fq"
-    shell:
-        "cat {input} > {output}"
-
-
 rule fastqc:
     input:
-        "reads/{sample}.fq"
+        "reads/{sample}/{barcode}.fastq"
     output:
-        html="qc/fastqc/{sample}.html",
-        zip="qc/fastqc/{sample}.zip"
+        html="qc/fastqc/{sample}-{barcode}.html",
+        zip="qc/fastqc/{sample}-{barcode}.zip"
     params: ""
     log:
-        "logs/fastqc/{sample}.log"
+        "logs/fastqc/{sample}-{barcode}.log"
     wrapper:
         "0.27.1/bio/fastqc"
 
 
 rule crimson:
     input:
-        "qc/fastqc/{sample}.zip"
+        "qc/fastqc/{sample}-{barcode}.zip"
     output:
-        "qc/fastqc/{sample}.json"
+        "qc/fastqc/{sample}-{barcode}.json"
     conda:
         "../envs/crimson.yaml"
     shell:
