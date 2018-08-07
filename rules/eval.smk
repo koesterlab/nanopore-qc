@@ -1,3 +1,5 @@
+import glob
+
 rule plot_raw:
     input:
         lambda w: glob.glob(samples.loc[w.sample, "fast5_pattern"])[config["signal"]["read"]]
@@ -13,9 +15,9 @@ rule plot_raw:
 
 rule plot_read_lengths:
     input:
-        "qc/fastqc/{sample}-{barcode}.json"
+        "qc/fastqc/{sample}.json"
     output:
-        report("plots/{sample}-{barcode}.read-lengths.svg", caption="../report/read-lengths.rst", category="Read length")
+        report("plots/{sample}.read-lengths.svg", caption="../report/read-lengths.rst", category="Read length")
     conda:
         "../envs/eval.yaml"
     script:
@@ -24,9 +26,9 @@ rule plot_read_lengths:
 
 rule plot_quals:
     input:
-        "qc/fastqc/{sample}-{barcode}.json"
+        "qc/fastqc/{sample}.json"
     output:
-        report("plots/{sample}-{barcode}.quals.svg", caption="../report/quals.rst", category="Base quality")
+        report("plots/{sample}.quals.svg", caption="../report/quals.rst", category="Base quality")
     conda:
         "../envs/eval.yaml"
     script:

@@ -28,22 +28,23 @@ for i, per_read_mapping in enumerate(d.kmer_mapping.str.split(" ")):
     if i == 100:
         break
 
-mappings = pd.concat(mappings)
-mappings = mappings.taxid.unstack()
-mappings = mappings.iloc[:, :100]
+if mappings:
+    mappings = pd.concat(mappings)
+    mappings = mappings.taxid.unstack()
+    mappings = mappings.iloc[:, :100]
 
-# color image in HSV representation of the circular layout of the taxid tree
-cmap = pickle.load(open(snakemake.input.colormap, "rb"))
-img = mappings.applymap(cmap.rgb)
+    # color image in HSV representation of the circular layout of the taxid tree
+    cmap = pickle.load(open(snakemake.input.colormap, "rb"))
+    img = mappings.applymap(cmap.rgb)
 
-shape = list(img.shape) + [3]
-img = np.vstack(img.values.tolist()).reshape(shape)
+    shape = list(img.shape) + [3]
+    img = np.vstack(img.values.tolist()).reshape(shape)
 
-#plt.figure(figsize=(30, 10))
+    #plt.figure(figsize=(30, 10))
 
-plt.imshow(img, interpolation="nearest", aspect="auto")
+    plt.imshow(img, interpolation="nearest", aspect="auto")
 
-plt.xlabel("k-mer")
-plt.ylabel("read")
+    plt.xlabel("k-mer")
+    plt.ylabel("read")
 
 plt.savefig(snakemake.output[0])

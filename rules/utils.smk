@@ -1,5 +1,3 @@
-
-
 rule calc_tree_colormap:
     input:
         "tables/{sample}-{barcode}.classification.tsv"
