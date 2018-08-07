@@ -1,24 +1,21 @@
-import glob
-
-
 rule fastqc:
     input:
-        "reads/{sample}/{barcode}.fastq"
+        "reads/{sample}/all.fastq.gz"
     output:
-        html="qc/fastqc/{sample}-{barcode}.html",
-        zip="qc/fastqc/{sample}-{barcode}.zip"
+        html="qc/fastqc/{sample}.html",
+        zip="qc/fastqc/{sample}.zip"
     params: ""
     log:
-        "logs/fastqc/{sample}-{barcode}.log"
+        "logs/fastqc/{sample}.log"
     wrapper:
         "0.27.1/bio/fastqc"
 
 
 rule crimson:
     input:
-        "qc/fastqc/{sample}-{barcode}.zip"
+        "qc/fastqc/{sample}.zip"
     output:
-        "qc/fastqc/{sample}-{barcode}.json"
+        "qc/fastqc/{sample}.json"
     conda:
         "../envs/crimson.yaml"
     shell:

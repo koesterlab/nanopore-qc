@@ -27,11 +27,11 @@ def load_classification_tree(f, min_percentage=0.0, node_fmt="{name} ({perc}%)")
 
     def traverse(subtree, G, parent=None):
         for node, children in subtree.items():
-            name, perc = classification.loc[node, ["name", "percentage"]].values
-            G.add_node(node, label=node_fmt.format(name=name.strip(), perc=perc))
+            name, perc, code = classification.loc[node, ["name", "percentage", "code"]].values
+            G.add_node(node, label=node_fmt.format(name=name.strip(), perc=perc), code=code)
             if parent is not None:
                 G.add_edge(parent, node)
-            
+
             if children:
                 traverse(children, G, parent=node)
 
@@ -49,7 +49,12 @@ class TreeCMap:
 
     def __init__(self, tree):
         self.tree = tree
-        root = next(n for n, d in tree.in_degree() if d == 0)
+        roots = [n for n, d in tree.in_degree() if d == 0 and n != "0"]
+        if not roots:
+            root = "0"
+        else:
+            root = roots[0]
+        self.depth = nx.shortest_path_length(self.tree, root)
         self.pos = graphviz_layout(tree, prog='twopi', args='-Groot="{}"'.format(root))
         nx.set_node_attributes(tree, {node: '{},{}!'.format(*pos) for node, pos in self.pos.items()}, name="pos")
         x = [p[0] for p in self.pos.values()]
@@ -73,15 +78,18 @@ class TreeCMap:
         if pd.isnull(taxid):
             return (1, 1, 1)
         try:
-            angle, mag = self._normed_angle_and_mag(self.pos[taxid])
-            rgb = matplotlib.colors.hsv_to_rgb([angle, mag, 0.9])
+            hue, sat = self._normed_angle_and_mag(self.pos[taxid])
+            rgb = matplotlib.colors.hsv_to_rgb([hue, sat, 0.9])
+
             return rgb
         except KeyError:
             # not in tree, mark black
             return (0, 0 , 0)
 
     def color_tree(self, tree):
-        colors = {node: "#{:02x}{:02x}{:02x}".format(*map(lambda v: int(v * 255), self.rgb(node).tolist())) for node in tree}
+        colors = {node: "#{:02x}{:02x}{:02x}".format(
+            *map(lambda v: int(v * 255),
+                 self.rgb(node))) for node in tree}
         nx.set_node_attributes(tree, colors, name="color")
 
     def write_dot(self, path):
