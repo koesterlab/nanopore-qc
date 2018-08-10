@@ -18,14 +18,6 @@ install:
   - conda config --add channels bioconda
   # create snakemake env
   - conda create -q -n snakemake snakemake python=$TRAVIS_PYTHON_VERSION
-  # build a small kraken db
-  - conda create -q -n kraken kraken
-  - source activate kraken
-  - mkdir .test/kraken-db
-  - cd .test/kraken-db
-  - kraken-build --download-library viral --db viral
-  - kraken-build --build --db viral
-  - source deactivate
 
 script:
   - source activate snakemake

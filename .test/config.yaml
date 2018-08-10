@@ -8,7 +8,7 @@ fast5-pattern: data/{sample}/fast5/pass/*/*.fast5
 
 # Path to the Kraken database that shall be used for classification.
 kraken:
-  db: kraken-db/viral
+  db: kraken-db
 
 # Configure how raw signals shall be plotted.
 signal:
