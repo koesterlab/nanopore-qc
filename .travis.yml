@@ -21,7 +21,6 @@ install:
   # download minimal kraken DB from https://doi.org/10.5281/zenodo.1343461
   - wget https://zenodo.org/record/1343462/files/kraken-test-db.tar.bz2?download=1 -O - | tar -C .test -xj 
 
-
 script:
   - source activate snakemake
   # run the workflow
