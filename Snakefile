@@ -32,4 +32,4 @@ rule per_sample_report:
     output:
         "reports/{sample}.report.html"
     shell:
-        "snakemake {input} --report {output}"
+        "snakemake --nolock {input} --report {output}"
