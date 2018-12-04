@@ -1,7 +1,7 @@
 # Patterns matching FASTQ files on disk. Samples and sequencing units (runs) will be inferred from these.
 # This should usually be set to the place where MinKNOW stores its results.
 fastq-patterns:
-  - data/{sample,[^/]+}/fastq/uploaded/pass/fastq_runid_{unit,[^/]+}.fastq
+  - data/{sample,[^/]+}/fastq/pass/fastq_runid_{unit,[^/]+}.fastq
 
 # Pattern for the corresponding fast5 files.
 fast5-pattern: data/{sample}/fast5/pass/*/*.fast5

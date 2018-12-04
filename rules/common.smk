@@ -16,3 +16,4 @@ for pattern in config["fastq-patterns"]:
 samples = samples.set_index("sample", drop=False)
 units = units.set_index(["sample", "unit"], drop=False)
 barcodes = expand("BC{barcode:02d}", barcode=range(1, 13))
+
